@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registrar Ganhos e Perdas</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #1f9909, #057e23);
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+      transition: background 8s ease-in-out, color 1.2s ease-in-out;
+      color: #f0f0f0;
+    }
+
+    h1 {
+      font-weight: 600;
+      font-size: 2.8em;
+      margin-bottom: 15px;
+      text-shadow: 1px 1px 4px rgba(5, 79, 0, 0.396);
+    }
+
+    .container {
+      background: rgba(212, 212, 212, 0.122);
+      border-radius: 10px;
+      padding: 30px 40px;
+      box-shadow: 0 0 30px rgba(8, 84, 2, 0.663);
+      max-width: 420px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 1.1em;
+      color: #fffffff6;
+      text-shadow: 0 0 6px #085711d0;
+    }
+    input::placeholder {
+  color: #ffffff5b;
+  opacity: 1;
+  font-weight: 600;
+  text-shadow: 0 0 2px #ffffff00;
+}
+
+
+    select, input[type="number"] {
+      width: 100%;
+      padding: 12px 15px;
+      font-size: 1.1em;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.164);
+      color: #ffffff;
+      font-weight: 600;
+      text-shadow: 0 0 2px #0d8317;
+      transition: background 0.4s ease;
+    }
+
+    select:hover, input[type="number"]:hover,
+    select:focus, input[type="number"]:focus {
+      background: rgba(31, 151, 9, 0.238);
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 14px 0;
+      font-size: 1.25em;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      background: #27bd0d;
+      color: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 0 15px #0c6207;
+      transition: background-color 0.4s ease, box-shadow 0.4s ease;
+      user-select: none;
+    }
+
+    button:hover {
+      background: #17a110;
+      box-shadow: 0 0 25px #6d6d6d69;
+    }
+
+    #status {
+      margin-top: 18px;
+      font-weight: 600;
+      min-height: 24px;
+      color: #ffffff;
+      text-shadow: 0 0 6px #ffffff00;
+    }
+
+    hr {
+      margin: 35px 0 25px;
+      border: none;
+      border-top: 1px solid #ffffff5a;
+      width: 100%;
+    }
+
+    #valorC34 {
+      font-size: 3em;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 0 15px #064804;
+      min-height: 50px;
+      user-select: none;
+    }
+
+    .btn-small {
+      margin-top: 15px;
+      padding: 10px 30px;
+      font-size: 1.1em;
+      border-radius: 10px;
+      background: #27d60f;
+      box-shadow: 0 0 15px #0dbd27e0;
+      cursor: pointer;
+      border: none;
+      color: #ffffff;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-small:hover {
+      background: #28ae16;
+      box-shadow: 0 0 25px #08c721cc;
+    }
+
+    /* Animação loading do valor */
+    #valorC34.loading {
+      font-style: italic;
+      animation: pulse 2.2s infinite;
+      text-shadow: 0 0 20px #117e17;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        text-shadow: 0 0 20px #0b8317;
+      }
+      50% {
+        opacity: 0.6;
+        text-shadow: none;
+      }
+    }
+
+    /* Responsividade */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2.4em;
+      }
+
+      #valorC34 {
+        font-size: 2.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Registrar Ganhos e Perdas</h1>
+
+  <div class="container">
+    <label for="tipo">Tipo:</label>
+    <select id="tipo" aria-label="Tipo de registro">
+      <option value="ganho">💰 Ganho</option>
+      <option value="perda">📉 Perda</option>
+    </select>
+
+    <label for="value">Valor:</label>
+    <input type="number" id="value" placeholder="Digite um valor numérico" aria-label="Valor a registrar" />
+
+    <button id="btnEnviar" onclick="enviar()">Enviar</button>
+    <p id="status" role="alert" aria-live="polite"></p>
+
+    <hr />
+
+    <h2>valor disponivel </h2>
+    <div id="valorC34" class="loading">Carregando...</div>
+    <button class="btn-small" onclick="atualizarC34()">Atualizar</button>
+  </div>
+
+  <script>
+    const url = "https://script.google.com/macros/s/AKfycbyuRWufkgOSdbcJgaDgovQ2zX6BsT0Om_QjeYgFAJRY53IwKmpO0FL9VJF3pnqQHE4G/exec";
+
+    async function enviar() {
+      const tipo = document.getElementById("tipo").value;
+      const valueInput = document.getElementById("value");
+      const value = valueInput.value.trim();
+      const status = document.getElementById("status");
+
+      if (!value || isNaN(value)) {
+        status.textContent = "Por favor, digite um número válido.";
+        status.style.color = "#ff6f91"; // rosa claro para erro
+        return;
+      }
+
+      status.textContent = "Enviando...";
+      status.style.color = "#d8b3ff";
+
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          body: new URLSearchParams({ tipo, value })
+        });
+
+        const msg = await res.text();
+        status.textContent = msg;
+        status.style.color = "#d8b3ff";
+
+        valueInput.value = "";
+        atualizarC34();
+
+      } catch (err) {
+        status.textContent = "Erro ao enviar: " + err.message;
+        status.style.color = "#ff6f91";
+      }
+    }
+
+    async function atualizarC34() {
+      const valorC34 = document.getElementById("valorC34");
+      valorC34.classList.add("loading");
+      valorC34.textContent = "Carregando...";
+
+      try {
+        const res = await fetch(url);
+        const valor = await res.text();
+        valorC34.textContent = `R$ ${parseFloat(valor).toFixed(2)}`;
+        valorC34.classList.remove("loading");
+      } catch (err) {
+        valorC34.textContent = "Erro ao carregar valor";
+        valorC34.classList.remove("loading");
+      }
+    }
+
+    // Atualiza ao carregar a página
+    atualizarC34();
+  </script>
+
+</body>
+</html>
